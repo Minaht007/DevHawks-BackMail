@@ -2,19 +2,23 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
 
+require("dotenv").config();
+
 const app = express();
-const port = 3000;
+const port = 3001;
+
+const { EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS } = process.env;
 
 app.use(express.json());
 app.use(cors());
 
 const transporter = nodemailer.createTransport({
-	host: process.env.EMAIL_HOST,
-	port: process.env.EMAIL_PORT,
+	host: EMAIL_HOST,
+	port: EMAIL_PORT,
 	secure: true,
 	auth: {
-		user: process.env.EMAIL_USER,
-		pass: process.env.EMAIL_PASS,
+		user: EMAIL_USER,
+		pass: EMAIL_PASS,
 	},
 	tls: {
 		rejectUnauthorized: false,
@@ -25,7 +29,7 @@ app.post("/send", (req, res) => {
 	const { to, subject, text } = req.body;
 
 	const mailOptions = {
-		from: process.env.EMAIL_USER,
+		from: EMAIL_USER,
 		to: to,
 		subject: subject,
 		text: text,
